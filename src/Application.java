@@ -112,21 +112,54 @@ public class Application {
                 case "4": //Cases for the host to remove a reservation.
                     if (role.equalsIgnoreCase("Host")) {
                         System.out.print("Enter ID to remove: ");
-                        manager.removeRecord(Integer.valueOf(scanner.nextLine().trim()));
+                        String removeInput = scanner.nextLine().trim();
+                        try {
+                            int idToRemove = Integer.parseInt(removeInput);
+                            manager.removeRecord(idToRemove);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid ID format.");
+                        }
                     } else if (role.equalsIgnoreCase("Manager")) { //Case for the manager to generate the audit report.
                         manager.generateAuditReport(scanner, role);
+                        System.out.print("Enter Employee ID to remove from audit log: ");
+                        String auditInput = scanner.nextLine().trim();
+                        try {
+                            int employId = Integer.parseInt(auditInput);
+                            manager.removeAuditLog(employId);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid ID format.");
+                        }
                     } else {
                         System.out.println("Access Denied"); //Otherwise denied.
                     }
                     break;
+
                 case "5": //Option for host to update a reservation
                     if (role.equalsIgnoreCase("Host")) {
                         System.out.print("Enter Reserved ID to update: ");
-                        manager.updateRecord(scanner, Integer.valueOf(scanner.nextLine().trim()));
+                        String updateInput = scanner.nextLine().trim();
+                        try {
+                            int idToUpdate = Integer.parseInt(updateInput);
+                            manager.updateRecord(scanner, idToUpdate);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid ID format.");
+                            break; // exit early if invalid
+                        }
+
+                        // Optional: If you really need to remove audit log after update
+                        System.out.print("Enter Employee ID to remove from audit log: ");
+                        String auditInput = scanner.nextLine().trim();
+                        try {
+                            int employId = Integer.parseInt(auditInput);
+                            manager.removeAuditLog(employId);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid ID format.");
+                        }
                     } else {
                         System.out.println("Access Denied"); //Otherwise denied.
                     }
                     break;
+
                 case "6": //Case allowing the users to log out successfully.
                     System.out.println("Successfully logged out");
                     return;
